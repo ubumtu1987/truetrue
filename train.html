@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+<script src = "https://momentjs.com/downloads/moment.js"> </script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+</head>
+<body>
+
+  <div class = "container">
+    <div class = "row">
+        <div class = "col-md-12" Id = "Start">
+
+                 Train Schedule 
+
+        </div>
+
+    </div>
+    <div class = "row">
+
+		<div class = "col-md-12" Id = "numbersTest">
+         Current time Schedule
+        </div>
+		<div class = "col-md-3" Id = "TNA">
+		Train Name
+            <div class ="row" >
+	            <div class = "col-md-12" Id = "TrainNA">
+	            </div>
+            </div>
+		</div>
+		<div class = "col-md-3" Id = "TD">
+		Destination
+		    <div class ="row" >
+	            <div class = "col-md-12" Id = "TrainD">
+	            </div>
+            </div>
+		</div>
+		<div class = "col-md-2" Id = "TF">
+		Frequency
+		    <div class ="row" >
+	            <div class = "col-md-12" Id = "TrainF">
+	            </div>
+            </div>
+		</div>
+		<div class = "col-md-2" Id = "TNT">
+        Next arrival
+            <div class ="row" >
+	            <div class = "col-md-12" Id = "TrainNext">
+	            </div>
+            </div>
+		</div>
+		<div class = "col-md-2" Id = "TM">
+		Minutes Away
+			<div class ="row" >
+	            <div class = "col-md-12" Id = "TrainM">
+	            </div>
+            </div>
+		</div>
+
+    </div>
+
+   <div class = "row">
+              <div class="form-group">
+                <label for="Train-Name">Train Name:</label>
+                <input type="text" class="form-control" id="Train-Name">
+              </div>
+              <div class="form-group">
+                <label for="Train-Destination">Destinaion:</label>
+                <input type="text" class="form-control" id="Train-Destination">
+              </div>
+		      <div class="form-group">
+                <label for="Train-First">Frist Train Time (Format XX:XX):</label>
+                <input type="text" class="form-control" id="Train-First">
+              </div>
+
+              <!-- Here we capture the End Year Parameter -->
+              <div class="form-group">
+                <label for="Train-Frequency">Frequency:</label>
+                <input type="text" class="form-control" id="Train-Frequency">
+              </div>
+
+              <!-- Here we have our final submit button -->
+              <button type="submit" class="btn btn-default" id="run-search"><i class="fa fa-search"></i> submit</button>
+    </div>
+    <div class = "row">
+       <div class = "col-md-12" Id = "TimeTest">
+        
+	   </div>
+	   <div class = "col-md-12" Id = "TimeTest2">
+        
+	   </div>
+	    <div class = "col-md-12" Id = "TimeTest3">
+        
+	   </div>
+	   <div class = "col-md-12" Id = "TimeTest4">
+        
+	   </div>
+	   <div class = "col-md-12" Id = "TimeTest5">
+        
+	   </div>
+	</div>
+
+   </div> 
+
+ </div>
+
+ <script type="text/javascript">
+ $(document).ready(function() {
+  
+   //moment().format('LT');   // 11:48 AM
+   
+
+   /*  
+   var mYear = moment().year();
+   var mMonth = moment().month()+1;
+   var mdays = moment().date();
+   console.log(mYear);
+   console.log(mMonth);
+   console.log(mdays);
+   
+   */
+   var config = {
+    apiKey: "AIzaSyC6o7t2PclsAkkXhFu4AklfNy1DqacBrT0",
+    authDomain: "firstproject-7e549.firebaseapp.com",
+    databaseURL: "https://firstproject-7e549.firebaseio.com",
+    storageBucket: "firstproject-7e549.appspot.com",
+    messagingSenderId: "741139754501"
+  };
+  firebase.initializeApp(config);
+   var database = firebase.database();
+
+   var TrainNamen = "";
+   var TrainDestinationMan = "";
+   var FTT = "";
+   var Freq = 0;
+   //updateMan();
+
+   //timeInterval = setInterval( operationMan, 1000*1);
+  
+   
+   var intervalId = setInterval(function(){
+   updateMan();
+   //console.log("hi");
+   }, 1000*60);
+
+
+   function updateMan(){
+	    database.ref("TrainList").on("value", function(snapshot) {
+
+	    var dataList = snapshot.val();
+	     
+	    var key = Object.keys(dataList);
+	    
+        var checkLength = key.length;
+        //console.log(checkLength);
+	        if(checkLength != 0){
+	        	    $("#TrainNA").html("");
+	        	    $("#TrainD").html("");
+	        	    $("#TrainF").html("");
+	        	    $("#TrainNext").html("");
+	        	    $("#TrainM").html("");
+	        //console.log(key);
+		            for( var i = 0 ; i < checkLength ; i++ ){
+                       var objData = dataList[key[i]];
+                       console.log(objData);
+                       var stringValue = objData.name+"";
+                       console.log(stringValue);
+                       var divisionMan = $("<p>");
+                       divisionMan.text(stringValue);
+                       $("#TrainNA").append(divisionMan); 
+                       var divisionMan2 = $("<p>");
+                       divisionMan2.text(objData.destination); 
+                       $("#TrainD").append(divisionMan2); 
+                       var divisionMan3 = $("<p>");
+                       var Fvalue =  objData.Frequency;
+                       console.log(Fvalue);
+                       divisionMan3.text(Fvalue);
+                       $("#TrainF").append(divisionMan3); 
+                       var startTime = objData.FirstTime;
+                       console.log(startTime);
+                       findClostT(Fvalue,startTime );
+
+		            }
+
+
+
+	        }
+
+
+
+	      // Handle the errors
+	    }, function(errorObject) {
+	      console.log("Errors handled: " + errorObject.code);
+	    });
+   }
+
+
+
+
+
+   $("#run-search").on("click", function(event) {
+      event.preventDefault();
+   	  TrainNamen = $("#Train-Name").val().trim();
+      TrainDestinationMan = $("#Train-Destination").val().trim();
+      FTT = $("#Train-First").val().trim();
+      var number = $("#Train-Frequency").val().trim();
+      Freq = parseInt(number);
+      database.ref("TrainList").push({
+        name: TrainNamen ,
+        destination: TrainDestinationMan,
+        FirstTime: FTT,
+        Frequency: Freq
+      });
+
+   });
+   
+
+
+   //findClostT(5, "06:00");
+
+   function findClostT(frequencyValue, startTime){
+   var timeTable = startTime.split(":");
+   console.log(timeTable);
+   var timeNow = moment(); 
+   var standardT = moment(); 
+   var compareT = moment();
+   var newTime = null;
+   var remainingTime = null; 
+   var useTime = moment();
+   compareT  = compareT .set({
+           'hour' : timeTable[0],
+           'minute'  : timeTable[1], 
+           'second' : 0
+           });
+
+   
+   var useTime = moment();
+   useTime  = useTime .set({
+           'hour' : timeTable[0],
+           'minute'  : timeTable[1], 
+           'second' : 0
+           });
+  
+  
+
+   var periodMin = moment(standardT).diff(moment(compareT), "minutes")+"";
+   var iNum = parseInt(periodMin);
+   var remainder = iNum%frequencyValue;
+   if(remainder == 0){
+   newTime = standardT.add(frequencyValue, 'm');
+   remainingTime =frequencyValue+"";
+
+
+   }else{
+   console.log(iNum);
+   var maxComputation = Math.floor( iNum/frequencyValue);
+  
+   maxComputation= maxComputation+1;
+   //console.log(maxComputation);
+   maxComputation = maxComputation*frequencyValue;
+   newTime = useTime.add( maxComputation , 'm');
+   //console.log(newTime);
+   remainingTime = moment(newTime).diff(moment(standardT), "minutes")+1;
+   
+   } 
+   
+   //$("#TimeTest").append(timeNow.format("LT"));
+   var divisionMan6 = $("<p>");
+   divisionMan6.text(newTime.format("LT"));
+   $("#TrainNext").append(divisionMan6);
+   
+   //$("#TimeTest2").append(compareT.format("LT"));
+   //$("#TimeTest3").append(maxComputation);
+   //$("#TimeTest4").append(newTime.format("LT"));
+  // $("#TimeTest5").append(remainingTime);
+   var divisionMan7 = $("<p>");
+   divisionMan7.text(remainingTime);
+   $("#TrainM").append(divisionMan7);
+  
+
+
+
+
+
+   //console.log("hi");
+   }
+
+
+   
+
+
+
+
+
+
+
+
+});
+
+
+</script> 	
+
+
+
+</body>
+
+
+
+
+</html>
+
+
+
+  
