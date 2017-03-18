@@ -1,0 +1,44 @@
+#Start{
+   border:solid;
+   min-height : 200px;
+   background-color: purple;
+   color : white;
+   font-size: 60px;
+   text-align:center; 
+
+}
+
+#numbersTest{
+  border:solid;
+  min-height : 100px;
+  background-color: orange;
+  font-size: 30px;
+  text-align:center;
+  color : white;
+}
+
+.arrange{
+  border-bottom:solid;
+  font-size: 15px;
+
+
+}
+
+.heightMan{
+  font-size : 15px;
+  min-height : 20px;
+
+}
+
+.ClickD{
+   min-height : 20px;
+   margin-bottom : 5px;
+
+}
+
+#bound{
+ border:solid;
+ border-color: black;
+
+
+}

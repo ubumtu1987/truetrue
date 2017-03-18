@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
+<link rel="stylesheet" type="text/css" href="style.css">
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 <script src = "https://momentjs.com/downloads/moment.js"> </script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -17,46 +18,53 @@
         </div>
 
     </div>
-    <div class = "row">
+    <div class = "row" Id = "bound">
 
-		<div class = "col-md-12" Id = "numbersTest">
-         Current time Schedule
-        </div>
-		<div class = "col-md-3" Id = "TNA">
-		Train Name
-            <div class ="row" >
-	            <div class = "col-md-12" Id = "TrainNA">
-	            </div>
-            </div>
-		</div>
-		<div class = "col-md-3" Id = "TD">
-		Destination
-		    <div class ="row" >
-	            <div class = "col-md-12" Id = "TrainD">
-	            </div>
-            </div>
-		</div>
-		<div class = "col-md-2" Id = "TF">
-		Frequency
-		    <div class ="row" >
-	            <div class = "col-md-12" Id = "TrainF">
-	            </div>
-            </div>
-		</div>
-		<div class = "col-md-2" Id = "TNT">
-        Next arrival
-            <div class ="row" >
-	            <div class = "col-md-12" Id = "TrainNext">
-	            </div>
-            </div>
-		</div>
-		<div class = "col-md-2" Id = "TM">
-		Minutes Away
-			<div class ="row" >
-	            <div class = "col-md-12" Id = "TrainM">
-	            </div>
-            </div>
-		</div>
+  		<div class = "col-md-12" Id = "numbersTest">
+           Current time Schedule
+          </div>
+  		<div class = "col-md-2 hi" Id = "TNA">
+  		    <div class = "arrange">Train Name </div>
+              <div class ="row" >
+  	            <div class = "col-md-12" Id = "TrainNA">
+  	            </div>
+              </div>
+  		</div>
+  		<div class = "col-md-2 hi" Id = "TD">
+  		   <div class = "arrange">Destination </div>
+  		    <div class ="row" >
+  	            <div class = "col-md-12" Id = "TrainD">
+  	            </div>
+              </div>
+  		</div>
+  		<div class = "col-md-2 hi" Id = "TF">
+  		  <div class = "arrange"> Frequency</div>
+  		    <div class ="row" >
+  	            <div class = "col-md-12" Id = "TrainF">
+  	            </div>
+              </div>
+  		</div>
+  		<div class = "col-md-2 hi" Id = "TNT">
+        <div class = "arrange"> Next arrival</div>
+              <div class ="row" >
+  	            <div class = "col-md-12" Id = "TrainNext">
+  	            </div>
+              </div>
+  		</div>
+  		<div class = "col-md-2 hi" Id = "TM">
+  		  <div class = "arrange">Minutes Away</div>
+  			<div class ="row" >
+  	            <div class = "col-md-12" Id = "TrainM">
+  	            </div>
+              </div>
+  		</div>
+      <div class = "col-md-2 hi" Id = "ButtonMan">
+        <div class = "arrange">Update Funtion</div>
+        <div class ="row" >
+                <div class = "col-md-12" Id = "FunctionS">
+                </div>
+              </div>
+      </div>
 
     </div>
 
@@ -129,7 +137,7 @@
   };
   firebase.initializeApp(config);
    var database = firebase.database();
-
+   var transformation = false;
    var TrainNamen = "";
    var TrainDestinationMan = "";
    var FTT = "";
@@ -137,10 +145,11 @@
    //updateMan();
 
    //timeInterval = setInterval( operationMan, 1000*1);
-  
+   updateMan();
    
    var intervalId = setInterval(function(){
    updateMan();
+   console.log("hi");
    //console.log("hi");
    }, 1000*60);
 
@@ -153,32 +162,45 @@
 	    var key = Object.keys(dataList);
 	    
         var checkLength = key.length;
+                $("#TrainNA").html("");
+                $("#TrainD").html("");
+                $("#TrainF").html("");
+                $("#TrainNext").html("");
+                $("#TrainM").html("");
+                $("#FunctionS").html(""); 
         //console.log(checkLength);
 	        if(checkLength != 0){
-	        	    $("#TrainNA").html("");
-	        	    $("#TrainD").html("");
-	        	    $("#TrainF").html("");
-	        	    $("#TrainNext").html("");
-	        	    $("#TrainM").html("");
+	        	   
 	        //console.log(key);
 		            for( var i = 0 ; i < checkLength ; i++ ){
                        var objData = dataList[key[i]];
-                       console.log(objData);
+                       //console.log("this is key : " + key[i])
+                       //console.log(objData);
                        var stringValue = objData.name+"";
-                       console.log(stringValue);
+                       //console.log(stringValue);
                        var divisionMan = $("<p>");
                        divisionMan.text(stringValue);
+                       divisionMan.addClass("heightMan");
                        $("#TrainNA").append(divisionMan); 
                        var divisionMan2 = $("<p>");
-                       divisionMan2.text(objData.destination); 
+                       divisionMan2.text(objData.destination);
+                       divisionMan2.addClass("heightMan"); 
                        $("#TrainD").append(divisionMan2); 
                        var divisionMan3 = $("<p>");
                        var Fvalue =  objData.Frequency;
-                       console.log(Fvalue);
+                       divisionMan3.addClass("heightMan");
+                       //console.log(Fvalue);
                        divisionMan3.text(Fvalue);
                        $("#TrainF").append(divisionMan3); 
                        var startTime = objData.FirstTime;
-                       console.log(startTime);
+                       //console.log(startTime);
+                       var divisionButton = $("<div>");
+                       var deleteMan = $("<button>");
+                       deleteMan.attr("value", key[i] );
+                       deleteMan.text("update");
+                       deleteMan.addClass("ClickD");
+                       divisionButton.append(deleteMan);
+                       $("#FunctionS").append( divisionButton); 
                        findClostT(Fvalue,startTime );
 
 		            }
@@ -268,6 +290,7 @@
    //$("#TimeTest").append(timeNow.format("LT"));
    var divisionMan6 = $("<p>");
    divisionMan6.text(newTime.format("LT"));
+   divisionMan6.addClass("heightMan");
    $("#TrainNext").append(divisionMan6);
    
    //$("#TimeTest2").append(compareT.format("LT"));
@@ -276,6 +299,7 @@
   // $("#TimeTest5").append(remainingTime);
    var divisionMan7 = $("<p>");
    divisionMan7.text(remainingTime);
+   divisionMan7.addClass("heightMan");
    $("#TrainM").append(divisionMan7);
   
 
@@ -288,10 +312,49 @@
 
 
    
+  $( document ).on( 'click', '.ClickD', function () {
+        event.preventDefault();
+        var keyFinder = $(this).attr("value");
+        TrainNamen = $("#Train-Name").val().trim();
+        TrainDestinationMan = $("#Train-Destination").val().trim();
+        FTT = $("#Train-First").val().trim();
+        var number = $("#Train-Frequency").val().trim();
+        Freq = parseInt(number);
+        
+        //console.log(key)
+        database.ref("TrainList").on("value", function(snapshot) {
+        var dataUpdate = snapshot.val();
+        var keyG = Object.keys(dataUpdate);
+            for(var i = 0 ; i < keyG.length ; i++){
+            //console.log(keyG);
+                if(keyG[i] == keyFinder ){
+                //console.log("hi");  
+                console.log(TrainNamen);
+                //console.log(dataUpdate[keyG[i]].name);
+                  dataUpdate[keyG[i]].name.set({name: TrainNamen ,
+                                               destination: TrainDestinationMan,
+                                               FirstTime: FTT,
+                                               Frequency: Freq
 
 
+                  });
+                //console.log(dataUpdate[keyG[i]].name);
+                //dataUpdate[keyG[i]].destination = TrainDestinationMan;
+                //dataUpdate[keyG[i]].FirstTime = FTT;  
+                //dataUpdate[keyG[i]].Frequency= Freq;
+
+                }
+
+            }
+        }, function(errorObject) {
+        console.log("Errors handled: " + errorObject.code);
+        }); 
+  
+    
+      
 
 
+  }); 
 
 
 
